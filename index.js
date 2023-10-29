@@ -140,7 +140,7 @@ if (imageUrl !== null) {
 }
 try {
     await notion.pages.create({
-        parent: { database_id: '35f2587452bd4416be5728aee43f2fcd' },
+        parent: { database_id: '11e2573297e14a4991ec520450c0a032' },
         properties: properties
     });
 

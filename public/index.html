@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta Online</title>
+  <link rel="stylesheet" href="style.css">
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500&family=Raleway:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <a href="#"><img class="logo" src="logo.png" alt=""></a>
+    </div>
+    <div class="menu-toggle" id="mobile-menu">
+      <span  style="margin-bottom: 4px;" class="bar"></span>
+      <span style="margin-bottom: 4px;" class="bar"></span>
+      <span style="margin-bottom: 5px;" class="bar"></span>
+    </div>
+    <ul class="nav-list">
+      <!-- <li><a href="#">Platos</a></li>
+      <li><a href="#">Bebidas</a></li>
+      <li><a href="#">Tragos</a></li>
+      <li><a href="#">Postres</a></li>-->
+      <li><a href="#">SHOWS</a></li> 
+    </ul>
+  </nav>
+  
+  <div class="hero"><img src="2.webp" alt=""></div>
+  <!-- Botón para abrir el modal de inicio de sesión -->
+  <button id="loginButton">Login</button>
+
+
+  
+
+  <div id="menu-container">
+    <!-- Aquí se mostrarán los ítems del menú -->
+  </div>
+
+  <div id="loader-container" style="display: none;">
+    <div class="honeycomb" id="loader">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+</div>
+<button id="back-to-top" class="back-to-top" style="display: none;"><img id="back" src="chevron-up-solid-60.png" alt=""></button>
+
+  
+  <script>let isAdmin = false;
+    const password = "admin123";  // De nuevo, esto es inseguro
+    
+  
+   // Función para verificar la contraseña
+  function checkPassword(inputPassword) {
+    if (inputPassword === password) {
+      isAdmin = true;
+      // Guardar el estado en el almacenamiento local
+      localStorage.setItem('isAdmin', true);
+      updateButtonVisibility();
+      // Cambiar el texto del botón a "Salir"
+      document.getElementById('loginButton').innerText = 'Loguin';
+      updateButtonVisibility();
+    } else {
+      Swal.fire('Error', 'Contraseña incorrecta', 'error');
+    }
+  }
+  
+    
+    // Función para actualizar la visibilidad del botón
+    function updateButtonVisibility() {
+      const specialButtons = document.querySelectorAll('.btn-especial');
+      specialButtons.forEach(button => {
+        button.style.display = isAdmin ? 'block' : 'none';
+      });
+    }
+    
+    // Mostrar el modal de inicio de sesión cuando se hace clic en el botón de inicio de sesión
+    document.getElementById('loginButton').addEventListener('click', function() {
+      document.getElementById('loginModal').style.display = 'block';
+    });
+    
+    // Cerrar el modal cuando se hace clic en la "X"
+    document.querySelector('.close').addEventListener('click', function() {
+      document.getElementById('loginModal').style.display = 'none';
+    });
+    </script>
+
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+
+</body>
+
+</html>

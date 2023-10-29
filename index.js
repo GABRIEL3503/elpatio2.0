@@ -83,41 +83,7 @@ myCache.del("menuItems");  // Invalidar el caché
 
 let cachedMenuItems = null;  // Caché en variable
 
-app.get('/menu', async (req, res) => {
-const cacheKey = "menuItems";
-const cachedData = myCache.get(cacheKey);
 
-if (cachedData) {
-    return res.json(cachedData);
-}
-
-if (cachedMenuItems) {
-    return res.json(cachedMenuItems);
-}
-
-try {
-    const response = await notion.databases.query({ database_id: '11e2573297e14a4991ec520450c0a032' });
-
-    // Agrupa los elementos por tipo
-    const grouped = {};
-    for (const item of response.results) {
-        const type = item.type; // Suponiendo que "type" es un campo
-        if (!grouped[type]) {
-            grouped[type] = [];
-        }
-        grouped[type].push(item);
-    }
-
-    // Actualiza las variables de caché y responde
-    cachedMenuItems = grouped;
-    myCache.set(cacheKey, grouped);
-    res.json(grouped);
-
-} catch (error) {
-    // Manejar error, por ejemplo, enviar una respuesta de error
-    res.status(500).json({ error: 'Internal Server Error' });
-}
-});
 app.post('/add-item', express.json(), async (req, res) => {
 const { name, price, imageUrl, description, category } = req.body;
 const properties = {

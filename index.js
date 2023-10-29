@@ -29,7 +29,6 @@ app.get('/menu', async (req, res) => {
         const response = await notion.databases.query({
             database_id: '11e2573297e14a4991ec520450c0a032'
         });
-       
        // Ordenar los elementos según la categoría
        const sortedItems = response.results.sort((a, b) => {
         const order = ["Postres", "Tragos","Platos"];

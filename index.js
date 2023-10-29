@@ -25,28 +25,39 @@ app.get('/menu', async (req, res) => {
     if (cachedData) {
         return res.json(cachedData);
     }
+
     try {
         const response = await notion.databases.query({
             database_id: '11e2573297e14a4991ec520450c0a032'
         });
-       // Ordenar los elementos según la categoría
-       const sortedItems = response.results.sort((a, b) => {
-        const order = ["Postres", "Tragos","Platos"];
-        const aValue = a.properties.categoria && a.properties.categoria.select ? a.properties.categoria.select.name : "";
-        const bValue = b.properties.categoria && b.properties.categoria.select ? b.properties.categoria.select.name : "";
-        return order.indexOf(aValue) - order.indexOf(bValue);
-    });
-    // Invertir el arreglo
-    const reversedItems = sortedItems.reverse();
+        
+        // Ordenar los elementos según la categoría
+        const order = ["Postres", "Tragos", "Platos"];
+        const sortedItems = response.results.sort((a, b) => {
+            const aValue = a.properties.categoria && a.properties.categoria.select ? a.properties.categoria.select.name : "";
+            const bValue = b.properties.categoria && b.properties.categoria.select ? b.properties.categoria.select.name : "";
+            return order.indexOf(aValue) - order.indexOf(bValue);
+        });
 
-    res.json(reversedItems);  // Envía los elementos ordenados al frontend
-    myCache.set(cacheKey, response.results);
-    return;  // Asegúrate de salir del bloque para que no se ejecute más código aquí
-} catch (error) {
-    console.error("Error fetching data from Notion:", error);
-    res.status(500).json({ error: 'Error fetching data from Notion' });
-}
+        // Agrupar los elementos ordenados por tipo
+        const groupedAndSorted = {};
+        for (const item of sortedItems) {
+            const type = item.type;  // Suponiendo que "type" es un campo en tu base de datos
+            if (!groupedAndSorted[type]) {
+                groupedAndSorted[type] = [];
+            }
+            groupedAndSorted[type].push(item);
+        }
+
+        myCache.set(cacheKey, groupedAndSorted);  // Guardar en caché
+        res.json(groupedAndSorted);  // Enviar la respuesta
+
+    } catch (error) {
+        console.error("Error fetching data from Notion:", error);
+        res.status(500).json({ error: 'Error fetching data from Notion' });
+    }
 });
+
 
 app.post('/update-item', express.json(), async (req, res) => {
 const { itemId, name, price, imageUrl, description } = req.body;
